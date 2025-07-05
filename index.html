@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .anime-tab {
+            /* Changed background to image8.jpg with subtle dark overlay */
+            background:
+                linear-gradient(to bottom right, rgba(0,0,0,0.40), rgba(0,0,0,0.40)),
+                url('image8.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-container {
+            background: rgba(15, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+        .quote-container:hover {
+            transform: scale(1.05);
+        }
+        .quote {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fcfafa;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        .byline {
+            font-size: 1.2rem;
+            color: #f0eded;
+        }
+        .gift-container {
+            position: relative;
+            cursor: pointer;
+        }
+        /* Futuristic Tab Styles */
+        .futuristic-tab {
+            background:
+                linear-gradient(to bottom right, #121212cc, #00ff8822),
+                url('image2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+            display: none;
+            position: relative;
+        }
+        .futuristic-content {
+            transform-style: preserve-3d;
+            animation: futuristicEntry 2s ease-out forwards;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes futuristicEntry {
+            0% {
+                transform: rotateY(90deg) scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+        .hbd-text {
+            font-size: 5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #00f7ff, #00ff88);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            margin: 2rem 0;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6);
+            }
+        }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        .photo-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            aspect-ratio: 1/1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0, 255, 255, 0.05) 24px,
+                rgba(0, 255, 255, 0.05) 25px
+            ),
+            repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 24px,
+                rgba(0, 255, 255, 0.05) 24px,
+                rgba(0, 255, 255, 0.05) 25px
+            );
+            pointer-events: none;
+        }
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: particlesMove linear infinite;
+        }
+        @keyframes particlesMove {
+            from {
+                transform: translateY(0px);
+            }
+            to {
+                transform: translateY(-100vh);
+            }
+        }
+        /* Audio Player Styles */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            color: white;
+        }
+        .audio-player button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        /* Confetti Styles */
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f00;
+            opacity: 0.8;
+            animation: confetti-fall 5s linear forwards;
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translate(0, 100vh) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="anime-tab" id="animeTab">
+        <div class="quote-container">
+            <div class="quote" id="dynamicQuote">"The greatest adventure begins with you by my side, not just today, but for all the days to come."</div>
+            <div class="byline">— Happy Birthday, Abjo!!!!</div>
+        </div>
+        <!-- Click Me Button -->
+        <button
+            id="clickMeBtn"
+            class="bg-gradient-to-r from-cyan-500 to-blue-800 text-white font-bold py-3 px-8 rounded-2xl shadow-lg text-2xl mt-6 hover:scale-105 transition"
+            style="z-index: 1;"
+        >
+            Click Me!
+        </button>
+    </div>
+    <div class="futuristic-tab" id="futuristicTab">
+        <div class="grid-lines"></div>
+        <div class="particles" id="particles"></div>
+        <div class="futuristic-content">
+            <div class="hbd-text">HAPPY BIRTHDAY ABJO!</div>
+            <p style="color: #aaa; max-width: 600px; margin: 0 auto 2rem;">
+                On this special day, I wish you happiness, success, and all the joy the universe can hold. 
+                Here's to many more adventures together in this futuristic journey called life!
+            </p>
+            <div class="photo-grid">
+                <div class="photo-placeholder">
+                    <img src="image1.jpg" alt="Friend smiling in a casual setting with city background" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="photo-placeholder">
+                    <img src="image3.jpg" alt="Friend posing in a formal outfit with light background" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="photo-placeholder">
+                    <img src="image4.jpg" alt="Friend laughing during an outdoor activity" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="photo-placeholder">
+                    <img src="image5.jpg" alt="Friend making a funny face with friends" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="photo-placeholder">
+                    <img src="image6.jpg" alt="Friend concentrating on a hobby or work" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="photo-placeholder">
+                    <img src="image7.jpg" alt="Friend enjoying nature during a trip" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Audio Player -->
+    <div class="audio-player">
+        <button id="playPauseBtn">▶️</button>
+        <span id="songTitle">Armadham Theme</span>
+        <audio id="bgMusic" loop>
+            <source src="Armadham.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <script>
+        // Dynamic birthday quotes
+        const quotes = [
+            "Friends like you make life's journey worthwhile. Happy Birthday!",
+            "Another year of amazing memories with an amazing friend. Cheers!",
+            "The best friendships are like fine wine - they get better with time. Happy Birthday!",
+            "Your friendship is the best gift I've ever received. Have the best birthday!",
+            "To the friend who makes every day brighter - Happy Birthday!"
+        ];
+        document.getElementById('dynamicQuote').textContent = 
+            quotes[Math.floor(Math.random() * quotes.length)];
+        // Particle creation for futuristic tab
+        const particlesContainer = document.getElementById('particles');
+        function createParticles() {
+            particlesContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = `${Math.random() * 5 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.opacity = Math.random();
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
+            document.body.appendChild(confettiContainer);
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `-10px`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 5 + 2}px`;
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 5000);
+        }
+        // Audio player controls
+        const bgMusic = document.getElementById('bgMusic');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        playPauseBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                playPauseBtn.textContent = '⏸️';
+            } else {
+                bgMusic.pause();
+                playPauseBtn.textContent = '▶️';
+            }
+        });
+        // Click Me Button logic
+        document.getElementById('clickMeBtn').addEventListener('click', function() {
+            // Show confetti
+            createConfetti();
+            // Switch to futuristic tab after a short delay
+            setTimeout(() => {
+                document.getElementById('animeTab').style.display = 'none';
+                document.getElementById('futuristicTab').style.display = 'block';
+                createParticles();
+                // Play music
+                bgMusic.play();
+                playPauseBtn.textContent = '⏸️';
+            }, 1000);
+        });
+        // Preload images for smoother transition
+        window.onload = () => {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                const src = img.getAttribute('src');
+                if (src.includes('placehold.co')) {
+                    new Image().src = src;
+                }
+            });
+        };
+    </script>
+</body>
+</html>
